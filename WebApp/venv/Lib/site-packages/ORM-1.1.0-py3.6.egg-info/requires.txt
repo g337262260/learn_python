@@ -1,0 +1,2 @@
+inflection>=0.2.0
+SQLAlchemy>=0.8
