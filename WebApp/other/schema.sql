@@ -2,7 +2,7 @@
 
 drop database if exists web;
 
-create database web;
+create database web
 
 use web;
 
