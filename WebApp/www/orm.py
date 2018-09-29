@@ -2,12 +2,13 @@
 # -*- coding:utf-8 -*-
 
 """封装数据库"""
+import aiomysql
 
 __author__ = 'Guowei'
 
 import asyncio, logging
 
-import aiomysql
+
 
 
 def log(sql, args=()):

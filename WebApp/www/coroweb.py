@@ -206,8 +206,13 @@ def testPost():
     pass
 
 
-def testkw(kw1, kw2, **kw):
+def testkw(kw1, kw2= 'B', **kw3):
     pass
+
+def testmm(name, age, *, city, job):
+    pass
+
+
 
 
 if __name__ == '__main__':
@@ -220,5 +225,10 @@ if __name__ == '__main__':
     # has_request_arg(fn): 检查函数是否有request参数，返回布尔值。若有request参数，检查该参数是否为该函数的最后一个参数，否则抛出异常
     print(has_request_arg(g))
     # has_var_kw_arg(fn):  检查函数是否有关键字参数集，返回布尔值
-    tt = testkw(1, 2,c = 's')
+    tt = testkw
     print(has_var_kw_arg(tt))
+    # has_named_kw_args(fn):检查函数是否有命名关键字参数，返回布尔值
+    tm = testmm
+    print('tm',get_named_kw_args(tm))
+    # get_required_kw_args(fn):将函数所有 没默认值的 命名关键字参数名 作为一个tuple返回
+    print('tr',get_required_kw_args(tm))
