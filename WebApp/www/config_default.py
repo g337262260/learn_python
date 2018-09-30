@@ -15,6 +15,6 @@ configs = {
         'database': 'test'
     },
     'session': {
-        'secret': 'AwEsOmE'
+        'secret': 'Guowei'
     }
 }
