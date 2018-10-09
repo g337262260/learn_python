@@ -196,7 +196,7 @@ async def get_blog(id):
         c.html_content = text2html(c.content)
     blog.html_content = markdown2.markdown(blog.content)
     return {
-        '__template__': 'blog.html',
+        '__template__': 'blogs.html',
         'blog': blog,
         'comments': comments
     }
@@ -207,6 +207,12 @@ async def api_get_blog(*, id):
     blog = await Blog.find(id)
     return blog
 
+@post('/api/blogs/{id}/delete')
+async def api_delete_blog(request,*,id):
+    check_admin(request)
+    blog = await Blog.find(id)
+    await blog.remove()
+    return dict(id = id)
 
 @post('/api/blogs')
 async def api_create_blog(request, *, name, summary, content):
@@ -223,7 +229,7 @@ async def api_create_blog(request, *, name, summary, content):
     return blog
 
 
-@get('api/blogs')
+@get('/api/blogs')
 async def api_blogs(*, page='1'):
     page_index = get_page_index(page)
     num = await Blog.findNumber('count(id)')
@@ -239,3 +245,4 @@ def manage_blogs(*, page='1'):
         '__template__': 'manage_blogs.html',
         'page_index': get_page_index(page)
     }
+
