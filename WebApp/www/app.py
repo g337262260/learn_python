@@ -49,9 +49,9 @@ async def logger_factory(app, handler):
     async def logger(request):
         logging.info('Request: %s %s' % (request.method, request.path))
         # await asyncio.sleep(0.3)
-        return (await handler(request))
-    return logger
+        return await handler(request)
 
+    return logger
 
 
 async def auth_factory(app, handler):
@@ -66,7 +66,8 @@ async def auth_factory(app, handler):
                 request.__user__ = user
         if request.path.startswith('/manage/') and (request.__user__ is None or not request.__user__.admin):
             return web.HTTPFound('/signin')
-        return (await handler(request))
+        return await handler(request)
+
     return auth
 
 
@@ -84,26 +85,27 @@ async def data_factory(app, handler):
     return parse_data
 
 
-async def response_factory(app,handler):
+async def response_factory(app, handler):
     async def response(request):
         logging.info('Response handler...')
         r = await handler(request)
-        if isinstance(r,web.StreamResponse):
+        if isinstance(r, web.StreamResponse):
             return r
-        if isinstance(r,bytes):
+        if isinstance(r, bytes):
             resp = web.Response(body=r)
             resp.content_type = 'application/octet-stream'
             return resp
-        if isinstance(r,str):
-            if r.startswith('redirect'):
+        if isinstance(r, str):
+            if r.startswith('redirect:'):
                 return web.HTTPFound(r[9:])
             resp = web.Response(body=r.encode('utf-8'))
             resp.content_type = 'text/html;charset=utf-8'
             return resp
-        if isinstance(r,dict):
+        if isinstance(r, dict):
             template = r.get('__template__')
             if template is None:
-                resp = web.Response(body=json.dumps(r,ensure_ascii=False, default=lambda o: o.__dict__).encode('utf-8'))
+                resp = web.Response(
+                    body=json.dumps(r, ensure_ascii=False, default=lambda o: o.__dict__).encode('utf-8'))
                 resp.content_type = 'application/json;charset=utf-8'
                 return resp
             else:
@@ -117,12 +119,13 @@ async def response_factory(app,handler):
             t, m = r
             if isinstance(t, int) and t >= 100 and t < 600:
                 return web.Response(t, str(m))
-        # default
+        # default:
         resp = web.Response(body=str(r).encode('utf-8'))
         resp.content_type = 'text/plain;charset=utf-8'
         return resp
 
     return response
+
 
 # 时间的筛选器
 def datetime_filter(t):
@@ -138,6 +141,7 @@ def datetime_filter(t):
     dt = datetime.fromtimestamp(t)
     return u'%s年%s月%s日' % (dt.year, dt.month, dt.day)
 
+
 async def init(loop):
     await orm.create_pool(loop=loop, host='127.0.0.1', port=3306, user='root', password='123456', database='web')
     app = web.Application(
@@ -149,10 +153,10 @@ async def init(loop):
         ]
     )
 
-    init_jinja2(app,filters=dict(datetime = datetime_filter))
-    add_routes(app,'handlers')
+    init_jinja2(app, filters=dict(datetime=datetime_filter))
+    add_routes(app, 'handlers')
     add_static(app)
-    srv = await loop.create_server(app.make_handler(),'127.0.0.1',9000)
+    srv = await loop.create_server(app.make_handler(), '127.0.0.1', 9000)
     return srv
 
 
@@ -160,5 +164,3 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.run_until_complete(init(loop))
     loop.run_forever()
-
-
