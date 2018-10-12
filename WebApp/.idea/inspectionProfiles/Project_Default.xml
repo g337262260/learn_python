@@ -12,6 +12,7 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="www.models.orm" />
+          <option value="fabfile.*" />
         </list>
       </option>
     </inspection_tool>
