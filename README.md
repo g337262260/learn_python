@@ -7,9 +7,9 @@ There are something of python about me
   
 ### utils
   封装的一些日常的工具（待完善）
-   PDF
-   EXCEL
-   抓取图片
+  - PDF
+  - EXCEL
+  - 抓取图片
 
 如有侵权，请联系本人删除
    
