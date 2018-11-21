@@ -10,6 +10,9 @@ There are something of python about me
   - PDF
   - EXCEL
   - 抓取图片
+  - WORD
+  - CSV
+  - Image处理（裁剪、加水印）
 
 如有侵权，请联系本人删除
    
