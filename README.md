@@ -13,6 +13,7 @@ There are something of python about me
   - WORD
   - CSV
   - Image处理（裁剪、加水印）
+  - 抓取网页数据
 
 如有侵权，请联系本人删除
    
